@@ -62,7 +62,7 @@ export function TaskBoard({ dateKey }: { dateKey: string }) {
               const idx = PRIORITIES.indexOf((t.priority as Priority) ?? "medium");
               update.mutate({
                 id: t.id,
-                patch: { priority: PRIORITIES[(idx + 1) % PRIORITIES.length] },
+                patch: { priority: PRIORITIES[(idx + 1) % PRIORITIES.length] ?? "medium" },
               });
             }}
           />
