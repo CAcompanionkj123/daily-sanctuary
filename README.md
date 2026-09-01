@@ -1323,10 +1323,8 @@ Desktop should use available screen width intelligently.
 
 Recommended:
 
-Left navigation
-+
-Large centered diary page
-+
+Left navigation +
+Large centered diary page +
 Optional right-side daily information
 
 Example:
