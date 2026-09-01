@@ -87,7 +87,9 @@ export function useToggleFavorite() {
 }
 
 /** Paginated archive list. */
-export function useEntries(opts: { page?: number; pageSize?: number; favoritesOnly?: boolean } = {}) {
+export function useEntries(
+  opts: { page?: number; pageSize?: number; favoritesOnly?: boolean } = {},
+) {
   const page = opts.page ?? 0;
   const pageSize = opts.pageSize ?? 20;
   return useQuery({
@@ -130,7 +132,10 @@ export function useCalendarMonth(monthStart: string, monthEnd: string) {
   });
 }
 
-export function useSearch(term: string, filters: { from?: string; to?: string; mood?: string } = {}) {
+export function useSearch(
+  term: string,
+  filters: { from?: string; to?: string; mood?: string } = {},
+) {
   return useQuery({
     queryKey: ["search", term, filters],
     enabled: term.trim().length > 1,
@@ -189,7 +194,8 @@ export function useSaveGratitude(entryId: string | null | undefined) {
         .eq("position", position)
         .maybeSingle();
       if (!content.trim()) {
-        if (existing.data) await supabase.from("gratitude_items").delete().eq("id", existing.data.id);
+        if (existing.data)
+          await supabase.from("gratitude_items").delete().eq("id", existing.data.id);
         return;
       }
       if (existing.data) {
@@ -214,7 +220,10 @@ export function useTags(entryId: string | null | undefined) {
     queryKey: ["tags", entryId],
     enabled: !!entryId,
     queryFn: async (): Promise<Tag[]> => {
-      const { data, error } = await supabase.from("entry_tags").select("*").eq("entry_id", entryId!);
+      const { data, error } = await supabase
+        .from("entry_tags")
+        .select("*")
+        .eq("entry_id", entryId!);
       if (error) throw error;
       return data ?? [];
     },
@@ -233,7 +242,9 @@ export function useTagMutations(entryId: string | null | undefined) {
       const user_id = await uid();
       const clean = tag.trim().replace(/^#/, "").toLowerCase().slice(0, 32);
       if (!clean) return;
-      const { error } = await supabase.from("entry_tags").insert({ entry_id: entryId, user_id, tag: clean });
+      const { error } = await supabase
+        .from("entry_tags")
+        .insert({ entry_id: entryId, user_id, tag: clean });
       if (error && !error.message.includes("duplicate")) throw error;
     },
     onSuccess: invalidate,

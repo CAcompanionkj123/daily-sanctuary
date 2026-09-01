@@ -111,7 +111,10 @@ export function friendlyError(message?: string | null): string {
 }
 
 export function excerpt(content: string, length = 140): string {
-  const plain = content.replace(/[#*_>`-]/g, "").replace(/\s+/g, " ").trim();
+  const plain = content
+    .replace(/[#*_>`-]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
   return plain.length > length ? `${plain.slice(0, length)}…` : plain;
 }
 

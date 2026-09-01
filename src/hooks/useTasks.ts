@@ -53,7 +53,11 @@ export function useTaskMutations() {
   const create = useMutation({
     mutationFn: async (task: Omit<TaskInsert, "user_id">) => {
       const user_id = await uid();
-      const { data, error } = await supabase.from("tasks").insert({ ...task, user_id }).select("*").single();
+      const { data, error } = await supabase
+        .from("tasks")
+        .insert({ ...task, user_id })
+        .select("*")
+        .single();
       if (error) throw error;
       return data;
     },
@@ -62,7 +66,12 @@ export function useTaskMutations() {
 
   const update = useMutation({
     mutationFn: async ({ id, patch }: { id: string; patch: TaskUpdate }) => {
-      const { data, error } = await supabase.from("tasks").update(patch).eq("id", id).select("*").single();
+      const { data, error } = await supabase
+        .from("tasks")
+        .update(patch)
+        .eq("id", id)
+        .select("*")
+        .single();
       if (error) throw error;
       return data;
     },

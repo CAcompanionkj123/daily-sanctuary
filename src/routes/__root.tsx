@@ -83,8 +83,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Digital Diary — a quiet place to write" },
       {
         name: "description",
-        content:
-          "A private, paper-inspired journal for daily entries, moods, gratitude and plans.",
+        content: "A private, paper-inspired journal for daily entries, moods, gratitude and plans.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

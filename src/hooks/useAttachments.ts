@@ -39,7 +39,7 @@ export function useAttachmentMutations(entryId: string | null | undefined) {
       const { data: auth } = await supabase.auth.getUser();
       const uid = auth.user?.id;
       if (!uid) throw new Error("Not signed in");
-      const safeName = file.name.replace(/[^\w.\-]+/g, "_").slice(-80);
+      const safeName = file.name.replace(/[^\w.-]+/g, "_").slice(-80);
       const path = `${uid}/${entryId}/${crypto.randomUUID()}-${safeName}`;
       const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, {
         contentType: file.type || "application/octet-stream",
