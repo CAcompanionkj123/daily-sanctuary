@@ -11,14 +11,24 @@ import { TaskBoard } from "@/components/TaskBoard";
 import { AppShell } from "@/components/AppShell";
 import { useAttachmentMutations, useAttachments } from "@/hooks/useAttachments";
 import { useEntry, useSaveEntry } from "@/hooks/useDiary";
-import { fromDateKey, moodOf, shiftDateKey, writingFontClass, writingSizeClass, lineSpacingClass } from "@/lib/diary";
+import {
+  fromDateKey,
+  moodOf,
+  shiftDateKey,
+  writingFontClass,
+  writingSizeClass,
+  lineSpacingClass,
+} from "@/lib/diary";
 import { useProfile } from "@/hooks/useProfile";
 
 export const Route = createFileRoute("/_authenticated/day/$date")({
   head: () => ({
     meta: [
       { title: "Daily page — Digital Diary" },
-      { name: "description", content: "Write, reflect and plan on your private Digital Diary daily page." },
+      {
+        name: "description",
+        content: "Write, reflect and plan on your private Digital Diary daily page.",
+      },
       { property: "og:title", content: "Daily page — Digital Diary" },
       { property: "og:description", content: "A quiet, private page for writing and reflection." },
     ],
@@ -54,7 +64,9 @@ function DayPage() {
       <div className="page-in space-y-6">
         <header className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="font-sans text-xs uppercase tracking-[0.28em] text-muted-foreground">Daily page</p>
+            <p className="font-sans text-xs uppercase tracking-[0.28em] text-muted-foreground">
+              Daily page
+            </p>
             <h1 className="mt-2 text-4xl">{displayDate}</h1>
           </div>
           <div className="flex items-center gap-2">
@@ -91,16 +103,29 @@ function DayPage() {
             />
             <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
               <span className="font-sans text-xs text-muted-foreground">
-                {save.isPending ? "Saving…" : entry?.updated_at ? "Saved just now" : "Your page saves when you leave a field"}
+                {save.isPending
+                  ? "Saving…"
+                  : entry?.updated_at
+                    ? "Saved just now"
+                    : "Your page saves when you leave a field"}
               </span>
-              {mood && <span className="font-sans text-sm text-muted-foreground">{mood.emoji} {mood.label}</span>}
+              {mood && (
+                <span className="font-sans text-sm text-muted-foreground">
+                  {mood.emoji} {mood.label}
+                </span>
+              )}
             </div>
           </article>
 
           <aside className="space-y-6">
             <section className="paper-sheet p-6">
               <h2 className="text-xl">How did it feel?</h2>
-              <div className="mt-4"><MoodPicker value={entry?.mood} onChange={(key, score) => saveText({ mood: key, mood_score: score })} /></div>
+              <div className="mt-4">
+                <MoodPicker
+                  value={entry?.mood}
+                  onChange={(key, score) => saveText({ mood: key, mood_score: score })}
+                />
+              </div>
             </section>
             <AttachmentBox entryId={entry?.id} inputRef={fileInput} />
           </aside>
@@ -115,14 +140,26 @@ function DayPage() {
   );
 }
 
-function AttachmentBox({ entryId, inputRef }: { entryId: string | undefined; inputRef: React.RefObject<HTMLInputElement | null> }) {
+function AttachmentBox({
+  entryId,
+  inputRef,
+}: {
+  entryId: string | undefined;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+}) {
   const { data: attachments = [] } = useAttachments(entryId);
   const { upload, remove } = useAttachmentMutations(entryId);
   return (
     <section className="paper-sheet p-6">
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-xl">Keepsakes</h2>
-        <Button size="icon" variant="outline" aria-label="Add photo or file" disabled={!entryId} onClick={() => inputRef.current?.click()}>
+        <Button
+          size="icon"
+          variant="outline"
+          aria-label="Add photo or file"
+          disabled={!entryId}
+          onClick={() => inputRef.current?.click()}
+        >
           <ImagePlus />
         </Button>
         <input
@@ -138,16 +175,36 @@ function AttachmentBox({ entryId, inputRef }: { entryId: string | undefined; inp
           }}
         />
       </div>
-      {!entryId && <p className="mt-2 font-sans text-xs text-muted-foreground">Save your page first to add a memory.</p>}
+      {!entryId && (
+        <p className="mt-2 font-sans text-xs text-muted-foreground">
+          Save your page first to add a memory.
+        </p>
+      )}
       <ul className="mt-4 space-y-3">
         {attachments.map((attachment) => (
           <li key={attachment.id} className="flex items-center gap-2 font-sans text-sm">
             <Paperclip className="h-4 w-4 shrink-0 text-muted-foreground" />
-            <a href={attachment.url ?? "#"} target="_blank" rel="noreferrer" className="min-w-0 flex-1 truncate underline-offset-4 hover:underline">{attachment.file_name}</a>
-            <Button size="icon" variant="ghost" aria-label={`Delete ${attachment.file_name}`} onClick={() => remove.mutate(attachment)}><Trash2 /></Button>
+            <a
+              href={attachment.url ?? "#"}
+              target="_blank"
+              rel="noreferrer"
+              className="min-w-0 flex-1 truncate underline-offset-4 hover:underline"
+            >
+              {attachment.file_name}
+            </a>
+            <Button
+              size="icon"
+              variant="ghost"
+              aria-label={`Delete ${attachment.file_name}`}
+              onClick={() => remove.mutate(attachment)}
+            >
+              <Trash2 />
+            </Button>
           </li>
         ))}
-        {!attachments.length && entryId && <li className="font-sans text-sm text-muted-foreground">No keepsakes yet.</li>}
+        {!attachments.length && entryId && (
+          <li className="font-sans text-sm text-muted-foreground">No keepsakes yet.</li>
+        )}
       </ul>
     </section>
   );
