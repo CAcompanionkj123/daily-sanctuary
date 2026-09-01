@@ -14,7 +14,11 @@ export function useProfile() {
       const { data: auth } = await supabase.auth.getUser();
       const uid = auth.user?.id;
       if (!uid) return null;
-      const { data, error } = await supabase.from("profiles").select("*").eq("id", uid).maybeSingle();
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", uid)
+        .maybeSingle();
       if (error) throw error;
       if (data) return data;
       const { data: created, error: insertError } = await supabase

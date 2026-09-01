@@ -69,10 +69,26 @@ function Landing() {
 
         <ul className="mt-16 grid gap-6 sm:grid-cols-2">
           {[
-            { icon: BookOpen, title: "Distraction-free pages", body: "One day, one page. Just ink on paper." },
-            { icon: Sparkles, title: "Mood & gratitude", body: "A gentle record of how life actually feels." },
-            { icon: CalendarDays, title: "Calendar & timeline", body: "See your months fill up, revisit any day." },
-            { icon: Lock, title: "Private by design", body: "Row-level security means your pages are yours alone." },
+            {
+              icon: BookOpen,
+              title: "Distraction-free pages",
+              body: "One day, one page. Just ink on paper.",
+            },
+            {
+              icon: Sparkles,
+              title: "Mood & gratitude",
+              body: "A gentle record of how life actually feels.",
+            },
+            {
+              icon: CalendarDays,
+              title: "Calendar & timeline",
+              body: "See your months fill up, revisit any day.",
+            },
+            {
+              icon: Lock,
+              title: "Private by design",
+              body: "Row-level security means your pages are yours alone.",
+            },
           ].map(({ icon: Icon, title, body }) => (
             <li key={title} className="paper-sheet p-5">
               <Icon className="h-5 w-5 text-muted-foreground" aria-hidden />
