@@ -93,7 +93,7 @@ importers:
         specifier: ^1.2.8
         version: 1.2.16(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@supabase/supabase-js':
-        specifier: ^2.112.3
+        specifier: ^2.112.4
         version: 2.112.4
       '@tailwindcss/vite':
         specifier: ^4.2.1
