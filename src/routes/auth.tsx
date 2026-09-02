@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/useAuth";
 import { friendlyError, todayKey } from "@/lib/diary";
 import { Button } from "@/components/ui/button";
@@ -62,11 +61,21 @@ function AuthPage() {
   }
 
   async function google() {
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result && "error" in result && result.error) {
-      toast.error(friendlyError(result.error.message));
+    if (busy) return;
+    setBusy(true);
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth`,
+        },
+      });
+
+      if (error) throw error;
+    } catch (err) {
+      toast.error(friendlyError(err instanceof Error ? err.message : null));
+      setBusy(false);
     }
   }
 
@@ -129,7 +138,7 @@ function AuthPage() {
           <span className="h-px flex-1 bg-border" />
         </div>
 
-        <Button variant="outline" className="w-full" onClick={google}>
+        <Button variant="outline" className="w-full" onClick={google} disabled={busy}>
           Continue with Google
         </Button>
 
