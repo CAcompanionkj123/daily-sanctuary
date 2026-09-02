@@ -100,16 +100,11 @@ export function greeting(date = new Date()): string {
 export function friendlyError(message?: string | null): string {
   if (!message) return "Something went wrong. Please try again.";
   const m = message.toLowerCase();
-  if (m.includes("invalid login") || m.includes("invalid credentials"))
-    return "That email and password don't match.";
-  if (m.includes("email not confirmed") || m.includes("email_not_confirmed"))
-    return "Please confirm your email address before signing in.";
+  if (m.includes("invalid login")) return "That email and password don't match.";
   if (m.includes("already registered") || m.includes("already been registered"))
     return "An account with this email already exists. Try signing in.";
   if (m.includes("password") && m.includes("6"))
     return "Please choose a password with at least 6 characters.";
-  if (m.includes("rate limit") || m.includes("too many requests"))
-    return "Too many attempts. Please wait a moment and try again.";
   if (m.includes("fetch") || m.includes("network"))
     return "You're offline. Your writing is saved on this device and will sync when you're back online.";
   return "Something went wrong. Your writing is safe on this device. Please try again.";
