@@ -18,15 +18,44 @@ async function uid() {
 export function useEntry(dateKey: string) {
   return useQuery({
     queryKey: ["entry", dateKey],
-    queryFn: async (): Promise<Entry | null> => {
-      const { data, error } = await supabase
+
+    queryFn: async (): Promise<Entry> => {
+      const user_id = await uid();
+
+      const { data: existing, error: fetchError } = await supabase
         .from("diary_entries")
         .select("*")
+        .eq("user_id", user_id)
         .eq("entry_date", dateKey)
         .maybeSingle();
-      if (error) throw error;
-      return data;
+
+      if (fetchError) {
+        throw fetchError;
+      }
+
+      if (existing) {
+        return existing;
+      }
+
+      const { data: created, error: createError } = await supabase
+        .from("diary_entries")
+        .insert({
+          user_id,
+          entry_date: dateKey,
+          title: null,
+          content: "",
+        })
+        .select("*")
+        .single();
+
+      if (createError) {
+        throw createError;
+      }
+
+      return created;
     },
+
+    retry: 1,
   });
 }
 
