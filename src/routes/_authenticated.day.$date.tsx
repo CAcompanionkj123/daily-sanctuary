@@ -11,6 +11,7 @@ import { TaskBoard } from "@/components/TaskBoard";
 import { AppShell } from "@/components/AppShell";
 import { useAttachmentMutations, useAttachments } from "@/hooks/useAttachments";
 import { useEntry, useSaveEntry } from "@/hooks/useDiary";
+import { useEffect, useRef, useState } from "react";
 import {
   fromDateKey,
   moodOf,
@@ -20,6 +21,8 @@ import {
   lineSpacingClass,
 } from "@/lib/diary";
 import { useProfile } from "@/hooks/useProfile";
+const titleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+const contentTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 export const Route = createFileRoute("/_authenticated/day/$date")({
   head: () => ({
@@ -87,16 +90,40 @@ function DayPage() {
           <article className="paper-sheet p-6 sm:p-10">
             <Input
               value={title}
-              onChange={(event) => setTitle(event.target.value)}
-              onBlur={() => saveText({ title: title.trim() || null })}
+              onChange={(event) => {
+  const value = event.target.value;
+  setTitle(value);
+
+  if (titleTimer.current) {
+    clearTimeout(titleTimer.current);
+  }
+
+  titleTimer.current = setTimeout(() => {
+    saveText({
+      title: value.trim() || null,
+    });
+  }, 500);
+}}
               placeholder="A title for today"
               aria-label="Entry title"
               className="border-0 px-0 font-display text-2xl shadow-none focus-visible:ring-0"
             />
             <Textarea
               value={content}
-              onChange={(event) => setContent(event.target.value)}
-              onBlur={() => saveText({ content })}
+              onChange={(event) => {
+  const value = event.target.value;
+  setContent(value);
+
+  if (contentTimer.current) {
+    clearTimeout(contentTimer.current);
+  }
+
+  contentTimer.current = setTimeout(() => {
+    saveText({
+      content: value,
+    });
+  }, 500);
+}}
               placeholder="What is on your mind?"
               aria-label="Diary entry"
               className={`ink-rule mt-7 min-h-[28rem] resize-y border-0 bg-transparent px-0 py-0 text-lg shadow-none focus-visible:ring-0 ${writingFontClass(profile?.preferred_font)} ${writingSizeClass(profile?.writing_size)} ${lineSpacingClass(profile?.line_spacing)}`}
