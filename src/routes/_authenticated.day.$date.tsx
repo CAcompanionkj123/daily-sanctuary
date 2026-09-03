@@ -58,7 +58,31 @@ function DayPage() {
   setTitle(entry.title ?? "");
   setContent(entry.content ?? "");
 }, [entry?.id]);
-
+if (entryLoading) {
+  return (
+    <AppShell>
+      <div className="page-in flex min-h-[60vh] items-center justify-center">
+        <p className="font-serif text-lg text-muted-foreground">
+          Opening your page…
+        </p>
+      </div>
+    </AppShell>
+  );
+}
+  if (entryError) {
+  return (
+    <AppShell>
+      <div className="page-in flex min-h-[60vh] items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl">This page didn't load</h1>
+          <p className="mt-2 font-serif text-muted-foreground">
+            Please try again.
+          </p>
+        </div>
+      </div>
+    </AppShell>
+  );
+}
   const displayDate = fromDateKey(date).toLocaleDateString(undefined, {
     weekday: "long",
     month: "long",
