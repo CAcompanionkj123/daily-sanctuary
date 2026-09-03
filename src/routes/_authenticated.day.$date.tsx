@@ -41,17 +41,23 @@ export const Route = createFileRoute("/_authenticated/day/$date")({
 
 function DayPage() {
   const { date } = Route.useParams();
-  const { data: entry } = useEntry(date);
+  const {
+  data: entry,
+  isLoading: entryLoading,
+  error: entryError,
+} = useEntry(date);
   const { data: profile } = useProfile();
   const save = useSaveEntry(date);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const fileInput = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    setTitle(entry?.title ?? "");
-    setContent(entry?.content ?? "");
-  }, [entry?.id, entry?.title, entry?.content]);
+ useEffect(() => {
+  if (!entry) return;
+
+  setTitle(entry.title ?? "");
+  setContent(entry.content ?? "");
+}, [entry?.id]);
 
   const displayDate = fromDateKey(date).toLocaleDateString(undefined, {
     weekday: "long",
@@ -130,12 +136,8 @@ function DayPage() {
             />
             <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
               <span className="font-sans text-xs text-muted-foreground">
-                {save.isPending
-                  ? "Saving…"
-                  : entry?.updated_at
-                    ? "Saved just now"
-                    : "Your page saves when you leave a field"}
-              </span>
+  {save.isPending ? "Saving…" : "Saved"}
+</span>
               {mood && (
                 <span className="font-sans text-sm text-muted-foreground">
                   {mood.emoji} {mood.label}
